@@ -11,8 +11,12 @@ export default function Login() {
       bg-linear-to-br from-white/45 to-white/10 rounded-2xl backdrop-blur-2xl backdrop-saturate-150 
      border border-white/20 border-t-white/70 border-l-white/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_8px_32px_rgba(15,30,61,0.08)]`}
     >
-      <img src="/cavono-learn-logo.svg" className="scale-100"></img>
+      <img
+        src="/cavono-learn-logo.svg"
+        className="scale-90 translate-y-10"
+      ></img>
       <form
+        className="w-full h-full flex flex-col justify-center items-center"
         onSubmit={(e) => {
           e.preventDefault();
           const form = new FormData(e.currentTarget);
@@ -23,7 +27,7 @@ export default function Login() {
           alert("ㄱㄷ 아직 안만듬");
         }}
       >
-        <FieldGroup className="flex flex-col gap-6 w-85">
+        <FieldGroup className="flex flex-col gap-6 w-1/2">
           <Field className="flex flex-row gap-2">
             <Label htmlFor="id" className="flex-1 font-extrabold">
               ID:
