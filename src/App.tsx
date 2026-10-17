@@ -1,9 +1,13 @@
 import { Analytics } from "@vercel/analytics/react";
+import Entry from "./components/Entry";
+import Authentication from "./components/Authentication";
 
 function App() {
   return (
     <>
-      <h1 className="text-9xl font-bold">Learn page.</h1>
+      <Authentication></Authentication>
+      <Entry></Entry>
+
       <Analytics />
     </>
   );
