@@ -1,14 +1,20 @@
 import { Analytics } from "@vercel/analytics/react";
 import Entry from "./components/Entry";
-import Authentication from "./components/Authentication";
+import Login from "./components/Login";
+import { useState } from "react";
 
 function App() {
+  const [id, setId] = useState("");
+  setId("");
   return (
     <>
-      <Authentication></Authentication>
-      <Entry></Entry>
+      <div className="flex flex-col w-screen h-screen justify-center items-center bg-[url(/cavono-wallpaper.svg)]">
+        <Login></Login>
 
-      <Analytics />
+        {id && <Entry></Entry>}
+
+        <Analytics />
+      </div>
     </>
   );
 }
