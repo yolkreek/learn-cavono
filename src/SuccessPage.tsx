@@ -7,7 +7,7 @@ export default function SuccessPage() {
 
   return (
     <>
-      <div className="flex flex-col w-screen h-screen justify-center items-center bg-[url(/cavono-wallpaper.svg)]">
+      <div className="flex flex-col w-full min-h-dvh justify-center items-center bg-[url(/cavono-wallpaper.svg)]">
         <div className="flex flex-col justify-center items-center gap-10">
           <p className="font-extrabold text-6xl">Verified!</p>
           <button
