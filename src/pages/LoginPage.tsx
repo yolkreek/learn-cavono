@@ -4,21 +4,22 @@ import { BrandWallpaper } from "@/components/BrandWallpaper";
 import { supabase } from "@/lib/supabase";
 import { useNavigate } from "react-router";
 import type { Session } from "@supabase/supabase-js";
+import { useSession } from "@/hooks/useSession";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-  const [session, setSession] = useState<Session | null>(null);
+  const sessionSet = useSession();
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session);
-    });
+    async function load() {
+      const s = await supabase.auth.getSession();
+      sessionSet.setSession(s.data.session);
+    }
 
-    return () => data.subscription.unsubscribe();
-  }, []);
+    load();
+  });
 
   return (
     <BrandWallpaper>
-      <Login session={session}></Login>
+      <Login></Login>
     </BrandWallpaper>
   );
 }

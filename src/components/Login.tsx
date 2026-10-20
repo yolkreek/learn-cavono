@@ -10,10 +10,14 @@ import SignUp from "./SignUp";
 import { useEffect } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { useNavigate } from "react-router";
+import { useSession } from "@/hooks/useSession";
 
-export default function Login({ session }: { session: Session | null }) {
-  const { submit, loading, error, userEmail } = useSignIn();
+export default function Login() {
+  const { submit, loading, error } = useSignIn();
   const navigate = useNavigate();
+  const { session } = useSession();
+
+  
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -22,7 +26,7 @@ export default function Login({ session }: { session: Session | null }) {
 
     submit(form.get("email") as string, form.get("password") as string);
   }
-
+  console.log(session);
   return (
     <div
       className={`m-5 flex flex-col gap-1 justify-center items-center px-10 py-10
@@ -76,7 +80,7 @@ export default function Login({ session }: { session: Session | null }) {
                 "bg-[#0F1E3D] hover:bg-[#0F1E3D]/90 hover:-translate-y-0.5 cursor-pointer"
               }
               type="submit"
-              disabled={loading || userEmail !== null}
+              disabled={loading}
             >
               <p className="text-white">Login</p>
             </Button>

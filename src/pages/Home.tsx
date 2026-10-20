@@ -1,24 +1,24 @@
 import { useNavigate } from "react-router";
 import { supabase } from "@/lib/supabase";
-import { useEffect, useState } from "react";
-import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
-import LoginPage from "./LoginPage";
+import { useEffect } from "react";
+
+import { useSession } from "@/hooks/useSession";
 
 type HomeProps = {};
 
 export default function Home({}: HomeProps) {
   const navigate = useNavigate();
-  const [isAuthed, setIsAuthed] = useState<boolean>(false);
-
+  const { session, setSession } = useSession();
+  console.log("Home" + session ? true : false);
   useEffect(() => {
     async function load() {
       const { data } = await supabase.auth.getSession();
-      if (data.session) setIsAuthed(true);
+      if (data.session) setSession(data.session);
       else navigate("/login");
     }
     load();
   }, []);
-  if (isAuthed)
+  if (session)
     return (
       <>
         <h1>Homepage</h1>
