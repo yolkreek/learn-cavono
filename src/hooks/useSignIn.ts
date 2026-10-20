@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signIn } from "@/api/auth";
-import { isAuthApiError } from "@supabase/supabase-js";
+import { isAuthApiError, type Session } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 
 export function useSignIn() {
   const [loading, setLoading] = useState(false);

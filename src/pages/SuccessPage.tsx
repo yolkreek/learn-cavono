@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/react";
 import { IconHome } from "@tabler/icons-react";
 import { useNavigate } from "react-router";
 
@@ -20,7 +19,7 @@ export default function SuccessPage() {
           </button>
         </div>
       </div>
-      <Analytics />
+    
     </>
   );
 }

@@ -99,7 +99,7 @@ export default function SignUpForm() {
         )}
         <Button
           type="submit"
-          className="bg-[#0F1E3D] hover:bg-[#0F1E3D]/90 hover:-translate-y-0.5 h-10 mt-4 w-1/2 text-center self-center cursor-pointer"
+          className="bg-brand hover:bg-[#0F1E3D]/90 hover:-translate-y-0.5 h-10 mt-4 w-1/2 text-center self-center cursor-pointer"
           disabled={loading || success}
         >
           Done

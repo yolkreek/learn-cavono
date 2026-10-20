@@ -1,13 +1,20 @@
 import { Route, Routes } from "react-router";
-import Home from "./Home";
-import SuccessPage from "./SuccessPage";
+import SuccessPage from "./pages/SuccessPage";
+import { Analytics } from "@vercel/analytics/react";
+import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/verified" element={<SuccessPage />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login/verified" element={<SuccessPage />} />
+      </Routes>
+
+      <Analytics />
+    </>
   );
 }
 

@@ -7,9 +7,13 @@ import { Button } from "./ui/button";
 import { supabase } from "@/lib/supabase";
 import { useSignIn } from "@/hooks/useSignIn";
 import SignUp from "./SignUp";
+import { useEffect } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { useNavigate } from "react-router";
 
-export default function Login() {
+export default function Login({ session }: { session: Session | null }) {
   const { submit, loading, error, userEmail } = useSignIn();
+  const navigate = useNavigate();
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -31,37 +35,41 @@ export default function Login() {
         onSubmit={handleSubmit}
       >
         <FieldGroup className="flex flex-col gap-6 w-full p-5 md:p-8">
-          <Field className="flex flex-row gap-2" orientation={"horizontal"}>
-            <Label
-              htmlFor="email"
-              className="w-20 font-extrabold inline-block text-right"
-            >
-              Email:
-            </Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              className="flex-1 bg-white/50 border-white/60 shadow-none focus-visible:ring-[#0F1E3D]/20 "
-            ></Input>
-          </Field>
-          <Field className="flex flex-row gap-2" orientation={"horizontal"}>
-            <Label
-              htmlFor="password"
-              className="w-20 shrink-0 font-extrabold inline-block text-right"
-            >
-              Password:
-            </Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              className="flex-1 bg-white/50 border-white/60 shadow-none focus-visible:ring-[#0F1E3D]/20"
-            ></Input>
-          </Field>
+          {!session && (
+            <>
+              <Field className="flex flex-row gap-2" orientation={"horizontal"}>
+                <Label
+                  htmlFor="email"
+                  className="w-20 font-extrabold inline-block text-right"
+                >
+                  Email:
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="flex-1 bg-white/50 border-white/60 shadow-none focus-visible:ring-[#0F1E3D]/20 "
+                ></Input>
+              </Field>
+              <Field className="flex flex-row gap-2" orientation={"horizontal"}>
+                <Label
+                  htmlFor="password"
+                  className="w-20 shrink-0 font-extrabold inline-block text-right"
+                >
+                  Password:
+                </Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  className="flex-1 bg-white/50 border-white/60 shadow-none focus-visible:ring-[#0F1E3D]/20"
+                ></Input>
+              </Field>
+            </>
+          )}
 
           {/*로그인 버튼*/}
-          {userEmail === null && (
+          {!session && (
             <Button
               variant={"outline"}
               className={
@@ -70,32 +78,44 @@ export default function Login() {
               type="submit"
               disabled={loading || userEmail !== null}
             >
-              <IconCheck color="white" stroke={3} />
+              <p className="text-white">Login</p>
             </Button>
           )}
 
           {/*로그아웃 버튼*/}
-          {userEmail !== null && (
-            <Button
-              variant={"outline"}
-              className={
-                "bg-[#0F1E3D] hover:bg-[#0F1E3D]/90 hover:-translate-y-0.5 cursor-pointer"
-              }
-              onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.reload();
-              }}
-            >
-              <p className="text-white">Sign out</p>
-            </Button>
+          {session && (
+            <>
+              <Button
+                variant={"outline"}
+                className={
+                  "bg-brand hover:bg-brand/90 hover:-translate-y-0.5 cursor-pointer"
+                }
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  window.location.reload();
+                }}
+              >
+                <p className="text-white">Sign out</p>
+              </Button>
+              <Button
+                className={"bg-brand hover:bg-brand/90 cursor-pointer"}
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Go to home
+              </Button>
+            </>
           )}
         </FieldGroup>
         {error && <p className="text-sm text-red-700">{error}</p>}
-        {userEmail && (
-          <p className="text-sm text-green-700">Hello, {userEmail}</p>
+        {session && (
+          <p className="text-sm text-green-700">
+            Hello, {session.user.email} {session.user.created_at})
+          </p>
         )}
       </form>
-      {userEmail === null && <SignUp className="flex-1 p-4 w-auto" />}
+      {!session && <SignUp className="flex-1 p-4 w-full" />}
     </div>
   );
 }
