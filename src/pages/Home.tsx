@@ -21,7 +21,7 @@ export default function Home({}: HomeProps) {
   if (session)
     return (
       <>
-        <h1>Homepage</h1>
+        <h1 className="text-9xl">Homepage</h1>
       </>
     );
 }

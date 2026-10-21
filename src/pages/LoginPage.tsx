@@ -15,7 +15,7 @@ export default function LoginPage() {
     }
 
     load();
-  });
+  }, []);
 
   return (
     <BrandWallpaper>
