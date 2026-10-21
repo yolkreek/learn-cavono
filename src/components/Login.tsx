@@ -80,7 +80,7 @@ export default function Login() {
               <Button
                 variant={"outline"}
                 className={
-                  "bg-[#0F1E3D] hover:bg-[#0F1E3D]/90 hover:-translate-y-0.5 cursor-pointer"
+                  "bg-brand hover:bg-brand/90 hover:-translate-y-0.5 cursor-pointer"
                 }
                 type="submit"
                 disabled={loading}

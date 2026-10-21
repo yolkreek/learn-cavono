@@ -1,8 +1,3 @@
-import { useNavigate } from "react-router";
-
-import { useEffect } from "react";
-
-import { useAuth } from "@/hooks/useAuth";
 import AuthWrapper from "@/components/AuthWrapper";
 
 type HomeProps = {};
