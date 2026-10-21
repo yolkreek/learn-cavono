@@ -5,15 +5,13 @@ import { isAuthApiError } from "@supabase/supabase-js";
 export function useSignIn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   async function submit(email: string, password: string) {
     setLoading(true);
     setError(null);
 
     try {
-      const user = await signIn(email, password);
-      setUserEmail(user.email ?? null);
+      await signIn(email, password);
     } catch (e: unknown) {
       if (isAuthApiError(e)) setError(e.message);
     } finally {
@@ -21,5 +19,5 @@ export function useSignIn() {
     }
   }
 
-  return { submit, loading, error, userEmail };
+  return { submit, loading, error };
 }

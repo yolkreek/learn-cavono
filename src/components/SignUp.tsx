@@ -12,7 +12,7 @@ export default function SignUp({ className }: { className: string }) {
           render={
             <Button
               variant={"outline"}
-              className={`${className} bg-[#0F1E3D] hover:bg-[#0F1E3D]/90 hover:-translate-y-0.5 cursor-pointer`}
+              className={`${className} bg-brand hover:bg-brand/90 hover:-translate-y-0.5 cursor-pointer`}
             >
               <p className="text-white">Sign up</p>
             </Button>
@@ -25,7 +25,7 @@ export default function SignUp({ className }: { className: string }) {
         >
           <DialogClose
             render={
-              <Button className="absolute top-2 right-2 bg-[#e0e9fc] text-[#0F1E3D] hover:bg-bg-[#e0e9fc]/90 hover:scale-120 cursor-pointer">
+              <Button className="absolute top-2 right-2 bg-[#e0e9fc] text-brand hover:bg-bg-[#e0e9fc]/90 hover:scale-120 cursor-pointer">
                 <IconX />
               </Button>
             }
