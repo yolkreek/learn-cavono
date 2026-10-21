@@ -1,7 +1,7 @@
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 import { supabase } from "@/lib/supabase";
 import { useSignIn } from "@/hooks/useSignIn";
