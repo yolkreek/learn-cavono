@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import { AuthProvider } from "./context/AuthProvider";
 import Page404 from "./pages/Page404";
-import LoadingPage from "./pages/LoadingPage";
+
 function App() {
   return (
     <>

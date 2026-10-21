@@ -1,5 +1,5 @@
 import { AuthContext } from "@/context/AuthProvider";
-import { supabase } from "@/lib/supabase";
+
 import { useContext } from "react";
 
 export function useAuth() {

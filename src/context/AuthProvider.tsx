@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
-import { PreviewCard } from "@base-ui/react";
+
 type AuthCtx =
   | { status: "loading" }
   | { status: "signedOut" }

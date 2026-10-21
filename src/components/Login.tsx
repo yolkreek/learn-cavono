@@ -1,4 +1,3 @@
-import { IconCheck } from "@tabler/icons-react";
 import { Label } from "./ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "./ui/input";
@@ -7,8 +6,7 @@ import { Button } from "./ui/button";
 import { supabase } from "@/lib/supabase";
 import { useSignIn } from "@/hooks/useSignIn";
 import SignUp from "./SignUp";
-import { useEffect } from "react";
-import type { Session } from "@supabase/supabase-js";
+
 import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
 
