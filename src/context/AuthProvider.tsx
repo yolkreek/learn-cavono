@@ -1,15 +1,26 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
-
-type AuthCtx = {
-  session: Session | null;
-  setSession: React.Dispatch<React.SetStateAction<Session | null>>;
-};
-
-export const AuthContext = createContext<AuthCtx | null>(null);
+import { supabase } from "@/lib/supabase";
+import { PreviewCard } from "@base-ui/react";
+type AuthCtx =
+  | { status: "loading" }
+  | { status: "signedOut" }
+  | { status: "signedIn"; session: Session };
+//undefined: out of AuthContext.
+export const AuthContext = createContext<AuthCtx | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
+  const [auth, setAuth] = useState<AuthCtx>({ status: "loading" });
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuth(
+        session
+          ? { status: "signedIn", session: session }
+          : { status: "signedOut" },
+      );
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
 
-  return <AuthContext value={{ session, setSession }}>{children}</AuthContext>;
+  return <AuthContext value={auth}>{children}</AuthContext>;
 }
