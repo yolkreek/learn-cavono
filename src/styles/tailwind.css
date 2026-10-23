@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -8,6 +9,7 @@
 @theme {
   --color-brand: #0f1e3d;
   --color-brand-lite: #d9deea;
+  --font-sora: "Sora";
 }
 
 @theme inline {

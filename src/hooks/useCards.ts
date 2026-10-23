@@ -1,29 +1,21 @@
-import type { CardType } from "@/components/main/Card";
+import type { CardType } from "@/types/card";
 import { supabase } from "@/lib/supabase";
+import type { CardsSetType } from "@/types/card";
 import { useEffect, useState } from "react";
 
-export type CardsSetType =
-  | {
-      cards: CardType[];
-      status: "loaded";
-    }
-  | { cards: null; status: "loading" };
-
 export function useCards() {
-  const [cards, setCards] = useState<CardsSetType>({
+  const [cardsState, setCardsState] = useState<CardsSetType>({
     cards: null,
     status: "loading",
   });
 
   useEffect(() => {
     async function load() {
-      const { data, error } = await supabase
-        .from("cards")
-        .select("*")
-        .overrideTypes<CardType[], { merge: false }>();
+      const { data, error } = await supabase.from("cards").select("*");
+
       if (error) throw new Error(error.message);
       console.log(data);
-      setCards(() => {
+      setCardsState(() => {
         let outCards = [] as CardType[];
         data.map((v) => {
           outCards.push({
@@ -44,5 +36,25 @@ export function useCards() {
     load();
   }, []);
 
-  return cards;
+  async function createCard(title: string, content: string) {
+    const { data, error } = await supabase
+      .from("cards")
+      .insert({
+        title,
+        content,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      return { error: null };
+    }
+
+    setCardsState((prev) => {
+      if (prev.cards === null) return { status: "loaded", cards: [data] };
+      else return { status: "loaded", cards: [...prev.cards, data] };
+    });
+  }
+
+  return { cardsState, createCard };
 }
