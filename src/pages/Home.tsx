@@ -4,7 +4,6 @@ import Card from "@/components/main/Card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCards } from "@/hooks/useCards";
-import useTest from "@/../test/useTest";
 
 export default function Home() {
   const { cardsState, createCard } = useCards();
