@@ -1,11 +1,14 @@
 import { supabase } from "@/lib/supabase";
 
 export function approveOauth() {
-  const params = new URLSearchParams(window.location.search);
+  const authId = new URLSearchParams(window.location.search).get(
+    "authorization_id",
+  ) as string;
   async function approve() {
-    await supabase.auth.oauth.approveAuthorization(
-      params.get("authorization_id") as string,
-    );
+    const { data, error } =
+      await supabase.auth.oauth.getAuthorizationDetails(authId);
+    await supabase.auth.oauth.approveAuthorization(authId);
+    console.log(data, error);
   }
 
   approve();
