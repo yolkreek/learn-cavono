@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "supatype": "supabase gen types --lang typescript  --project-id bpwpfpnlvaepseerxddf > src/types/database.ts"
+    "supatype": "supabase gen types --lang typescript  --project-id bpwpfpnlvaepseerxddf > src/types/database.ts",
+    "g": "git add . && git commit -m \".\" && git push"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

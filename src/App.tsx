@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import { AuthProvider } from "./context/AuthProvider";
 import Page404 from "./pages/Page404";
+import OauthPage from "./pages/OauthPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login/verified" element={<SuccessPage />} />
+          <Route path="/oauth/consent" element={<OauthPage />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </AuthProvider>
