@@ -78,27 +78,40 @@ export function useCards() {
     return data;
   }
 
-  // async function updateCard(id: string) {
-  //   const { data, error } = await supabase
-  //     .from("cards")
-  //     .update()
-  //     .eq("id", id)
-  //     .select()
-  //     .maybeSingle();
+  async function updateCard(
+    id: string,
+    updated_at: string,
+    title?: string,
+    content?: string,
+  ) {
+    const { data, error } = await supabase
+      .from("cards")
+      .update({ updated_at, title, content })
+      .eq("id", id)
+      .select()
+      .maybeSingle();
 
-  //   if (error) {
-  //     return { error: null };
-  //   }
+    if (!data) return { error: null };
+    if (error) {
+      return { error: null };
+    }
 
-  //   setCardsState((prev) => {
-  //     if (!prev.cards) return prev;
+    setCardsState((prev) => {
+      if (!prev.cards) return prev;
 
-  //     const newCards = prev.cards.filter((v) => v.id !== id);
-  //     return { status: "loaded", cards: newCards };
-  //   });
+      const newCards = [...prev.cards];
+      newCards.forEach((v) => {
+        if (v.id === data.id) {
+          v.updated_at = updated_at;
+          if (title) v.title = title;
+          if (content) v.content = content;
+        }
+      });
+      return { status: "loaded", cards: newCards };
+    });
 
-  //   return data;
-  // }
+    return data;
+  }
 
   return { cardsState, createCard, deleteCard };
 }

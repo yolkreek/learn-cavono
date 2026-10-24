@@ -21,7 +21,7 @@ export default function Card({
         x
       </Button>
       <Separator></Separator>
-      <div className="flex-15 p-2">{card.content}</div>
+      <div className="flex-15 p-2 overflow-auto">{card.content}</div>
       <Separator></Separator>
       <div className="flex-1 p-2 text-center">Writed at, {card.created_at}</div>
     </div>
