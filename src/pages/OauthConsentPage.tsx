@@ -2,8 +2,8 @@ import { approveOauth, denyOauth } from "@/api/oauth";
 import { BrandWallpaper } from "@/components/BrandWallpaper";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import OauthLoginPage from "./OauthLoginPage";
+import { Navigate, useLocation } from "react-router";
+
 import OauthConsentError from "./OauthConsentError";
 import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";

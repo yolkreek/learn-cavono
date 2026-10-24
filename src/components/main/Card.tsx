@@ -1,6 +1,5 @@
 import type { CardType } from "@/types/card";
 import { Separator } from "../ui/separator";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
 export default function Card({
