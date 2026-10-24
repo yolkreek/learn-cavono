@@ -7,7 +7,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-brand: #0f1e3d;
+  --color-brand: #1f2d4b;
   --color-brand-lite: #d9deea;
   --font-sora: "Sora";
 }

@@ -56,5 +56,49 @@ export function useCards() {
     });
   }
 
-  return { cardsState, createCard };
+  async function deleteCard(id: string) {
+    const { data, error } = await supabase
+      .from("cards")
+      .delete()
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      return { error: null };
+    }
+
+    setCardsState((prev) => {
+      if (!prev.cards) return prev;
+
+      const newCards = prev.cards.filter((v) => v.id !== id);
+      return { status: "loaded", cards: newCards };
+    });
+
+    return data;
+  }
+
+  // async function updateCard(id: string) {
+  //   const { data, error } = await supabase
+  //     .from("cards")
+  //     .update()
+  //     .eq("id", id)
+  //     .select()
+  //     .maybeSingle();
+
+  //   if (error) {
+  //     return { error: null };
+  //   }
+
+  //   setCardsState((prev) => {
+  //     if (!prev.cards) return prev;
+
+  //     const newCards = prev.cards.filter((v) => v.id !== id);
+  //     return { status: "loaded", cards: newCards };
+  //   });
+
+  //   return data;
+  // }
+
+  return { cardsState, createCard, deleteCard };
 }

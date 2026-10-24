@@ -6,18 +6,18 @@ import { Separator } from "@/components/ui/separator";
 import { useCards } from "@/hooks/useCards";
 
 export default function Home() {
-  const { cardsState, createCard } = useCards();
+  const { cardsState, createCard, deleteCard } = useCards();
 
   return (
     <AuthWrapper>
       <HomeWallpaper>
         <div className="flex flex-col justify-center items-center w-full h-full">
-          <header className="h-50 flex flex-col justify-center">
+          <header className="h-20 flex flex-col justify-center">
             <p className="text-5xl font-extrabold font-sora text-brand/80">
               Homepage
             </p>
           </header>
-          <Separator className={"bg-brand"} />
+          <Separator className={"bg-brand/60"} />
           <main className="min-h-0 flex-1 w-full overflow-y-auto flex flex-col items-center">
             <Button
               className={
@@ -31,7 +31,9 @@ export default function Home() {
             </Button>
             <div className="grid md:grid-cols-5 gap-10 w-full p-4 ">
               {cardsState.status === "loaded" &&
-                cardsState.cards.map((v) => <Card key={v.id} card={v}></Card>)}
+                cardsState.cards.map((v) => (
+                  <Card key={v.id} card={v} handleDelete={deleteCard}></Card>
+                ))}
             </div>
           </main>
         </div>

@@ -9,6 +9,7 @@ import SignUp from "./SignUp";
 
 import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
+import GoToHome from "../GoToHome";
 
 export default function Login() {
   const { submit, loading, error } = useSignIn();
@@ -104,14 +105,7 @@ export default function Login() {
                 >
                   <p className="text-white">Sign out</p>
                 </Button>
-                <Button
-                  className={"bg-brand hover:bg-brand/90 cursor-pointer"}
-                  onClick={() => {
-                    navigate("/");
-                  }}
-                >
-                  Go to home
-                </Button>
+                <GoToHome />
               </>
             )}
           </FieldGroup>
