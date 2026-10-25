@@ -14,4 +14,5 @@ export type CardType = {
   linked_to: string[] | null;
   created_at: string;
   updated_at: string;
+  pos: number;
 };

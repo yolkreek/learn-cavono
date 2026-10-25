@@ -8,40 +8,39 @@ export function useCards() {
     cards: null,
     status: "loading",
   });
+  const [cardsToBeShown, setCardsToBeShown] = useState<CardType[]>(
+    [] as CardType[],
+  );
 
   useEffect(() => {
     async function load() {
-      const { data, error } = await supabase.from("cards").select("*");
+      const { data, error } = await supabase
+        .from("cards")
+        .select("*")
+        .order("pos");
 
       if (error) throw new Error(error.message);
       console.log(data);
-      setCardsState(() => {
-        let outCards = [] as CardType[];
-        data.map((v) => {
-          outCards.push({
-            id: v.id,
-            title: v.title,
-            content: v.content,
-            tag: v.tag,
-            linked_to: v.linked_to,
-            created_at: v.created_at,
-            updated_at: v.updated_at,
-          });
-        });
-
-        return { cards: outCards, status: "loaded" };
-      });
+      setCardsState({ cards: data, status: "loaded" });
+      setCardsToBeShown(data);
     }
 
     load();
   }, []);
 
-  async function createCard(title: string, content: string) {
+  function renderCard() {
+    if (cardsState.status !== "loaded")
+      return { cards: null, status: cardsState.status };
+    return { cards: cardsToBeShown, status: "loaded" };
+  }
+
+  async function createCard(title: string, content: string, pos: number) {
     const { data, error } = await supabase
       .from("cards")
       .insert({
         title,
         content,
+        pos,
       })
       .select()
       .single();
@@ -78,20 +77,15 @@ export function useCards() {
     return data;
   }
 
-  async function updateCard(
-    id: string,
-    updated_at: string,
-    title?: string,
-    content?: string,
-  ) {
+  async function updateCard(id: string, title?: string, content?: string) {
     const { data, error } = await supabase
       .from("cards")
-      .update({ updated_at, title, content })
+      .update({ title, content })
       .eq("id", id)
       .select()
       .maybeSingle();
+    console.log(data, error);
 
-    if (!data) return { error: null };
     if (error) {
       return { error: null };
     }
@@ -101,8 +95,7 @@ export function useCards() {
 
       const newCards = [...prev.cards];
       newCards.forEach((v) => {
-        if (v.id === data.id) {
-          v.updated_at = updated_at;
+        if (v.id === id) {
           if (title) v.title = title;
           if (content) v.content = content;
         }
@@ -113,5 +106,27 @@ export function useCards() {
     return data;
   }
 
-  return { cardsState, createCard, deleteCard };
+  function searchCard(tag: string[]) {
+    if (tag.length === 1 && tag.at(0) === "") {
+      setCardsToBeShown(cardsState.cards ?? []);
+      return;
+    }
+
+    if (cardsState.cards === null) return;
+    setCardsToBeShown(() => {
+      const render = cardsState.cards.filter((v) => {
+        if (!v.tag) return false;
+        else return tag.every((item) => v.tag?.includes(item) ?? false);
+      });
+      return render;
+    });
+  }
+
+  return {
+    renderCard,
+    createCard,
+    deleteCard,
+    updateCard,
+    searchCard,
+  };
 }
