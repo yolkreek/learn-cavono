@@ -1,18 +1,17 @@
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 import { supabase } from "@/lib/supabase";
 import { useSignIn } from "@/hooks/useSignIn";
 import SignUp from "./SignUp";
 
-import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
+import GoToHome from "../GoToHome";
 
 export default function Login() {
   const { submit, loading, error } = useSignIn();
-  const navigate = useNavigate();
   const auth = useAuth();
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
@@ -104,14 +103,7 @@ export default function Login() {
                 >
                   <p className="text-white">Sign out</p>
                 </Button>
-                <Button
-                  className={"bg-brand hover:bg-brand/90 cursor-pointer"}
-                  onClick={() => {
-                    navigate("/");
-                  }}
-                >
-                  Go to home
-                </Button>
+                <GoToHome />
               </>
             )}
           </FieldGroup>

@@ -1,5 +1,10 @@
-import { Button } from "./ui/button";
-import { Dialog, DialogClose, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "../ui/dialog";
 import { IconX } from "@tabler/icons-react";
 
 import SignUpForm from "./SignUpForm";
