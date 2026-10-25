@@ -10,9 +10,8 @@ import { IconSearch } from "@tabler/icons-react";
 import { AnimatePresence } from "motion/react";
 
 export default function Home() {
-  const { renderCard, createCard, deleteCard, updateCard, searchCard } =
+  const { cards, status, createCard, deleteCard, updateCard, setTags } =
     useCards();
-  const render = renderCard();
 
   return (
     <AuthWrapper>
@@ -27,7 +26,7 @@ export default function Home() {
                 const tag = form.get("tag") as string;
                 const tagArray = tag.split(" ");
 
-                searchCard(tagArray);
+                setTags(tagArray);
               }}
             >
               <Input name="tag" type="text" className=" bg-white"></Input>
@@ -64,8 +63,8 @@ export default function Home() {
             </Button>
             <div className="grid md:grid-cols-5 gap-10 w-full p-4 ">
               <AnimatePresence>
-                {render.status === "loaded" &&
-                  render.cards.map((v) => (
+                {status === "loaded" &&
+                  cards.map((v) => (
                     <Card
                       key={v.id}
                       card={v}

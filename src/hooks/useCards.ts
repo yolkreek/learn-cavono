@@ -1,17 +1,17 @@
 import type { CardType } from "@/types/card";
 import { supabase } from "@/lib/supabase";
 import type { CardsSetType } from "@/types/card";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export function useCards() {
   const [cardsState, setCardsState] = useState<CardsSetType>({
     cards: null,
     status: "loading",
   });
-  const [cardsToBeShown, setCardsToBeShown] = useState<CardType[]>(
-    [] as CardType[],
-  );
-
+  const [tags, setTags] = useState<string[]>([]);
+  const visibleCards = useMemo(() => {
+    return searchCard(cardsState.cards, tags);
+  }, [cardsState.cards, tags]);
   useEffect(() => {
     async function load() {
       const { data, error } = await supabase
@@ -22,17 +22,10 @@ export function useCards() {
       if (error) throw new Error(error.message);
       console.log(data);
       setCardsState({ cards: data, status: "loaded" });
-      setCardsToBeShown(data);
     }
 
     load();
   }, []);
-
-  function renderCard() {
-    if (cardsState.status !== "loaded")
-      return { cards: null, status: cardsState.status };
-    return { cards: cardsToBeShown, status: "loaded" };
-  }
 
   async function createCard(title: string, content: string, pos: number) {
     const { data, error } = await supabase
@@ -106,27 +99,26 @@ export function useCards() {
     return data;
   }
 
-  function searchCard(tag: string[]) {
-    if (tag.length === 1 && tag.at(0) === "") {
-      setCardsToBeShown(cardsState.cards ?? []);
-      return;
+  function searchCard(cards: CardType[] | null, tags: string[]): CardType[] {
+    if (tags.length === 0 || (tags.length === 1 && tags.at(0) === "")) {
+      return cards ?? [];
     }
 
-    if (cardsState.cards === null) return;
-    setCardsToBeShown(() => {
-      const render = cardsState.cards.filter((v) => {
-        if (!v.tag) return false;
-        else return tag.every((item) => v.tag?.includes(item) ?? false);
-      });
-      return render;
+    if (cards === null) return [];
+
+    const visible = cards.filter((v) => {
+      if (!v.tag) return false;
+      else return tags.every((item) => v.tag?.includes(item) ?? false);
     });
+    return visible;
   }
 
   return {
-    renderCard,
+    cards: visibleCards,
+    status: cardsState.status,
     createCard,
     deleteCard,
     updateCard,
-    searchCard,
+    setTags,
   };
 }
