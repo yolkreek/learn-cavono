@@ -28,13 +28,14 @@ export default function Card({
     focus:shadow-[0_0_20px_4px_rgba(80,120,255,0.25)]`}
       exit={{ opacity: 0, scale: 0.9 }}
     >
-      <div className="relative flex flex-row font-bold text-center p-4 items-center">
+      <div className="relative flex flex-row font-bold text-center p-4 items-center w-full">
         <p className="text-black/50 shrink-0">{card.pos}</p>
         <p className="absolute left-1/2 -translate-x-1/2 w-3/4">{card.title}</p>
         <CardDropDown
           handleDelete={handleDelete}
           handleUpdate={handleUpdate}
           id={card.id}
+          content={card.content}
         />
       </div>
 
@@ -42,7 +43,7 @@ export default function Card({
       <div className="flex-15 p-2 overflow-auto">{card.content}</div>
       <Separator></Separator>
       <div className="p-2 flex flex-row gap-2">
-        {card.tag?.map((v, i) => (
+        {card.tags.map((v, i) => (
           <p key={v + i.toString()}>#{v}</p>
         ))}
       </div>

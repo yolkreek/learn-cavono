@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useCards } from "@/hooks/useCards";
+import { useSearchCard } from "@/hooks/useSearchCard";
 
 import { IconSearch } from "@tabler/icons-react";
 import { AnimatePresence } from "motion/react";
 
 export default function Home() {
-  const { cards, status, createCard, deleteCard, updateCard, setTags } =
-    useCards();
+  const { cardsState, createCard, deleteCard, updateCard } = useCards();
+  const { filteredCards, search } = useSearchCard(cardsState);
 
   return (
     <AuthWrapper>
@@ -26,7 +27,7 @@ export default function Home() {
                 const tag = form.get("tag") as string;
                 const tagArray = tag.split(" ");
 
-                setTags(tagArray);
+                search(tagArray);
               }}
             >
               <Input name="tag" type="text" className=" bg-white"></Input>
@@ -56,15 +57,15 @@ export default function Home() {
                 "bg-brand h-10 w-80 m-4 cursor-pointer hover:-translate-y-1 hover:bg-brand/90"
               }
               onClick={() => {
-                createCard("untitled", "test", 10000);
+                createCard("title", "content");
               }}
             >
               Create Card
             </Button>
             <div className="grid md:grid-cols-5 gap-10 w-full p-4 ">
               <AnimatePresence>
-                {status === "loaded" &&
-                  cards.map((v) => (
+                {cardsState.status === "loaded" &&
+                  filteredCards.map((v) => (
                     <Card
                       key={v.id}
                       card={v}

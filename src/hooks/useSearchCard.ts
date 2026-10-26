@@ -1,4 +1,4 @@
-import type { CardType } from "@/types/card";
+import type { CardsSetType, CardType } from "@/types/card";
 import { useMemo, useState } from "react";
 
 function searchCard(cards: CardType[], tags: string[]): CardType[] {
@@ -9,20 +9,22 @@ function searchCard(cards: CardType[], tags: string[]): CardType[] {
   if (cards === null) return [];
 
   const filteredCards = cards.filter((v) => {
-    if (!v.tag) return false;
-    else return tags.every((item) => v.tag?.includes(item) ?? false);
+    if (!v.tags) return false;
+    else return tags.every((item) => v.tags.includes(item));
   });
   return filteredCards;
 }
 
-export default function useSearch(cards: CardType[]) {
+export function useSearchCard(cardsState: CardsSetType) {
   const [tagsState, setTagsState] = useState<string[]>([]);
+
   const filteredCards = useMemo(() => {
-    return searchCard(cards, tagsState);
-  }, [cards, tagsState]);
+    if (cardsState.status !== "loaded") return [];
+    return searchCard(cardsState.cards, tagsState);
+  }, [cardsState, tagsState]);
 
   return {
-    cards: filteredCards,
+    filteredCards,
     search: setTagsState,
   };
 }

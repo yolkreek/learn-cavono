@@ -8,11 +8,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import AgentPromptPortal from "./AgentPromptPortal";
 
 export default function CardDropDown({
   id,
   handleDelete,
   handleUpdate,
+  content,
 }: {
   id: string;
   handleDelete: (id: string) => void;
@@ -21,6 +23,7 @@ export default function CardDropDown({
     title?: string | undefined,
     content?: string | undefined,
   ) => void;
+  content: string;
 }) {
   return (
     <DropdownMenu>
@@ -35,29 +38,38 @@ export default function CardDropDown({
           </Button>
         }
       ></DropdownMenuTrigger>
-      <DropdownMenuContent className={"bg-brand-lite"}>
+      <DropdownMenuContent className={"bg-brand-lite ring-2 p-1"}>
         <DropdownMenuGroup>
           <DropdownMenuLabel>Functions</DropdownMenuLabel>
+          <DropdownMenuItem
+            className={
+              "transition-all 300 ease-in focus:bg-brand/20 cursor-pointer"
+            }
+            onClick={() => {
+              handleUpdate(id, "modified", "modified");
+            }}
+          >
+            Update
+          </DropdownMenuItem>
 
           <DropdownMenuItem
             className={
               "transition-all 300 ease-in focus:bg-brand/20 cursor-pointer"
+            }
+            closeOnClick={false}
+          >
+            <AgentPromptPortal content={content} />
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className={
+              "transition-all 300 ease-in focus:bg-brand/20 cursor-pointer text-red-600 focus:text-red-600"
             }
             onClick={() => {
               handleDelete(id);
             }}
           >
             Delete
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className={
-              "transition-all 300 ease-in focus:bg-brand/20 cursor-pointer"
-            }
-            onClick={() => {
-              handleUpdate(id, "MODIFIED", "MODIFIED AS WELL");
-            }}
-          >
-            Update
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

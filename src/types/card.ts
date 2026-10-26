@@ -3,14 +3,14 @@ export type CardsSetType =
       cards: CardType[];
       status: "loaded";
     }
-  | { cards: null; status: "loading" }
-  | { cards: null; status: "error" };
+  | { status: "loading" }
+  | { status: "error"; error: string };
 
 export type CardType = {
   id: string;
   title: string;
   content: string;
-  tag: string[];
+  tags: string[];
   linked_to: string[];
   created_at: string;
   updated_at: string;

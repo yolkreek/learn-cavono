@@ -1,17 +1,12 @@
-import type { CardType } from "@/types/card";
 import { supabase } from "@/lib/supabase";
 import type { CardsSetType } from "@/types/card";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useCards() {
   const [cardsState, setCardsState] = useState<CardsSetType>({
-    cards: null,
     status: "loading",
   });
-  const [tags, setTags] = useState<string[]>([]);
-  const visibleCards = useMemo(() => {
-    return searchCard(cardsState.cards, tags);
-  }, [cardsState.cards, tags]);
+
   useEffect(() => {
     async function load() {
       const { data, error } = await supabase
@@ -19,7 +14,10 @@ export function useCards() {
         .select("*")
         .order("pos");
 
-      if (error) throw new Error(error.message);
+      if (error) {
+        setCardsState({ status: "error", error: error.message });
+        return;
+      }
       console.log(data);
       setCardsState({ cards: data, status: "loaded" });
     }
@@ -28,11 +26,11 @@ export function useCards() {
   }, []);
 
   async function createCard(
-    title: string,
-    content: string,
-    tags: string[],
-    linked_to: string[],
-    pos: number,
+    title: string = "untitled",
+    content: string = "",
+    tags: string[] = [],
+    linked_to: string[] = [],
+    pos: number = 0,
   ) {
     const { data, error } = await supabase
       .from("cards")
@@ -51,8 +49,10 @@ export function useCards() {
     }
 
     setCardsState((prev) => {
-      if (prev.cards === null) return { status: "loaded", cards: [data] };
-      else return { status: "loaded", cards: [...prev.cards, data] };
+      if (prev.status === "loaded") {
+        console.log(data);
+        return { status: "loaded", cards: [...prev.cards, data] };
+      } else return prev;
     });
   }
 
@@ -69,8 +69,7 @@ export function useCards() {
     }
 
     setCardsState((prev) => {
-      if (!prev.cards) return prev;
-
+      if (prev.status !== "loaded") return prev;
       const newCards = prev.cards.filter((v) => v.id !== id);
       return { status: "loaded", cards: newCards };
     });
@@ -78,10 +77,17 @@ export function useCards() {
     return data;
   }
 
-  async function updateCard(id: string, title?: string, content?: string) {
+  async function updateCard(
+    id: string,
+    title?: string,
+    content?: string,
+    tags?: string[],
+    linked_to?: string[],
+  ) {
+    const params = { title, content, tags, linked_to };
     const { data, error } = await supabase
       .from("cards")
-      .update({ title, content })
+      .update(params)
       .eq("id", id)
       .select()
       .maybeSingle();
@@ -92,41 +98,30 @@ export function useCards() {
     }
 
     setCardsState((prev) => {
-      if (!prev.cards) return prev;
+      if (prev.status !== "loaded") return prev;
 
-      const newCards = [...prev.cards];
-      newCards.forEach((v) => {
-        if (v.id === id) {
-          if (title) v.title = title;
-          if (content) v.content = content;
-        }
+      const newCards = prev.cards.map((v) => {
+        if (v.id === id)
+          return {
+            ...v,
+            ...(title && { title }),
+            ...(content && { content }),
+            ...(tags && { tags }),
+            ...(linked_to && { linked_to }),
+          };
+        else return v;
       });
+
       return { status: "loaded", cards: newCards };
     });
 
     return data;
   }
 
-  function searchCard(cards: CardType[] | null, tags: string[]): CardType[] {
-    if (tags.length === 0 || (tags.length === 1 && tags.at(0) === "")) {
-      return cards ?? [];
-    }
-
-    if (cards === null) return [];
-
-    const visible = cards.filter((v) => {
-      if (!v.tag) return false;
-      else return tags.every((item) => v.tag?.includes(item) ?? false);
-    });
-    return visible;
-  }
-
   return {
-    cards: visibleCards,
-    status: cardsState.status,
+    cardsState,
     createCard,
     deleteCard,
     updateCard,
-    setTags,
   };
 }
