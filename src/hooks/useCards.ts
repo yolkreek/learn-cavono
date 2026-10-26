@@ -27,12 +27,20 @@ export function useCards() {
     load();
   }, []);
 
-  async function createCard(title: string, content: string, pos: number) {
+  async function createCard(
+    title: string,
+    content: string,
+    tags: string[],
+    linked_to: string[],
+    pos: number,
+  ) {
     const { data, error } = await supabase
       .from("cards")
       .insert({
         title,
         content,
+        tags,
+        linked_to,
         pos,
       })
       .select()

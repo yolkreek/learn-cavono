@@ -16,32 +16,32 @@ export type Database = {
     Tables: {
       cards: {
         Row: {
-          content: string | null
+          content: string
           created_at: string
           id: string
-          linked_to: string[] | null
+          linked_to: string[]
           pos: number
-          tag: string[] | null
+          tags: string[]
           title: string
           updated_at: string
         }
         Insert: {
-          content?: string | null
+          content?: string
           created_at?: string
           id?: string
-          linked_to?: string[] | null
+          linked_to: string[]
           pos: number
-          tag?: string[] | null
+          tags?: string[]
           title?: string
           updated_at?: string
         }
         Update: {
-          content?: string | null
+          content?: string
           created_at?: string
           id?: string
-          linked_to?: string[] | null
+          linked_to?: string[]
           pos?: number
-          tag?: string[] | null
+          tags?: string[]
           title?: string
           updated_at?: string
         }

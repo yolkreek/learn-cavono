@@ -9,9 +9,9 @@ export type CardsSetType =
 export type CardType = {
   id: string;
   title: string;
-  content: string | null;
-  tag: string[] | null;
-  linked_to: string[] | null;
+  content: string;
+  tag: string[];
+  linked_to: string[];
   created_at: string;
   updated_at: string;
   pos: number;
