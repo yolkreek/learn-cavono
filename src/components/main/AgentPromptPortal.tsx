@@ -4,7 +4,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import useAgentPrompt from "@/hooks/useAgentPrompt";
-import { IconLoader } from "@tabler/icons-react";
+//import { IconLoader } from "@tabler/icons-react";
 
 import ReactMarkdown from "react-markdown";
 
