@@ -18,7 +18,7 @@ export default function useAgentPrompt() {
     }
 
     load();
-  }, []);
+  }, [content]);
 
   return { ask: setContent, answer: ans };
 }
