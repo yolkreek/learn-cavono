@@ -47,5 +47,5 @@ export async function POST(req: Request) {
     config: { systemInstruction: SYSTEM_PROMPT },
   });
 
-  return Response.json({ answer: content });
+  return Response.json({ answer: answer.text });
 }
