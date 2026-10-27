@@ -26,7 +26,7 @@ export default function CardDropDown({
   content: string;
 }) {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         render={
           <Button

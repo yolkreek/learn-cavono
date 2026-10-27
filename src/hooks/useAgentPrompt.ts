@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function useAgentPrompt() {
-  const [content, setContent] = useState("");
-  const [ans, setAns] = useState("");
-  useEffect(() => {
-    async function load() {
-      const res = await fetch("/api/agent/gemini", {
-        method: "POST",
-        headers: {
-          "x-vercel-protection-bypass": "postmanfromyolkandyolkfrompostma",
-        },
-        body: JSON.stringify({ content: content }),
-      });
-      const data = await res.json();
-      const answer = data.answer as string;
-      setAns(answer);
-    }
+  const [answerState, setAnswerState] = useState<
+    { status: "loading" } | { status: "loaded"; answer: string }
+  >({ status: "loading" });
 
-    load();
-  }, [content]);
+  async function ask(content: string) {
+    const res = await fetch("/api/agent/gemini", {
+      method: "POST",
+      body: JSON.stringify({ content: content }),
+    });
+    const data = await res.json();
+    const answer = data.answer as string;
 
-  return { ask: setContent, answer: ans };
+    setAnswerState({ status: "loaded", answer: answer });
+  }
+  return { ask, answerState };
 }
