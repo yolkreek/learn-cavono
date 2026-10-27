@@ -42,7 +42,7 @@ export async function POST(req: Request) {
   const content = data.content;
 
   const answer = await ai.models.generateContent({
-    model: "gemini-3.8-flash",
+    model: "gemini-3.5-flash-lite",
     contents: content,
     config: { systemInstruction: SYSTEM_PROMPT },
   });
