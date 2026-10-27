@@ -10,7 +10,7 @@ export default function useAgentPrompt() {
         headers: {
           "x-vercel-protection-bypass": "postmanfromyolkandyolkfrompostma",
         },
-        body: JSON.stringify(content),
+        body: JSON.stringify({ content: content }),
       });
       const data = await res.json();
       const answer = data.content as string;
