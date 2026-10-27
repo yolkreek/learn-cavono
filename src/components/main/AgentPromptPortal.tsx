@@ -9,13 +9,17 @@ import { IconLoader } from "@tabler/icons-react";
 import ReactMarkdown from "react-markdown";
 
 export default function AgentPromptPopover({ content }: { content: string }) {
-  const answerState = useAgentPrompt(content);
+  const { ask, answer } = useAgentPrompt();
   return (
     <>
       <Popover>
         <PopoverTrigger
           render={
-            <button tabIndex={-1} className="cursor-pointer">
+            <button
+              tabIndex={-1}
+              className="cursor-pointer"
+              onClick={() => ask(content)}
+            >
               Ask Gemini
             </button>
           }
@@ -25,12 +29,9 @@ export default function AgentPromptPopover({ content }: { content: string }) {
           align="start"
           className={"w-100 h-125 bg-brand-lite ring-2"}
         >
-          {answerState.status === "loading" && (
-            <IconLoader className="animate-spin self-center size-5" />
-          )}
-          {answerState.status === "loaded" && (
+          {answer() !== "" && (
             <div className="overflow-auto">
-              <ReactMarkdown>{answerState.answer}</ReactMarkdown>
+              <ReactMarkdown>{answer()}</ReactMarkdown>
             </div>
           )}
         </PopoverContent>
