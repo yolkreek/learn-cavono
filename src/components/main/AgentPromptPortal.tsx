@@ -30,7 +30,7 @@ export default function AgentPromptPopover({ content }: { content: string }) {
           className={"w-100 h-125 bg-brand-lite ring-2"}
         >
           <div className="overflow-auto">
-            <ReactMarkdown>{answer()}</ReactMarkdown>
+            <ReactMarkdown>{answer}</ReactMarkdown>
           </div>
         </PopoverContent>
       </Popover>

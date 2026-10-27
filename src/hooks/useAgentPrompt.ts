@@ -13,12 +13,12 @@ export default function useAgentPrompt() {
         body: JSON.stringify({ content: content }),
       });
       const data = await res.json();
-      const answer = data.content as string;
+      const answer = data.answer as string;
       setAns(answer);
     }
 
     load();
   }, []);
 
-  return { ask: setContent, answer: () => ans };
+  return { ask: setContent, answer: ans };
 }
