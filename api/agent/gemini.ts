@@ -10,6 +10,7 @@ export async function POST(req: Request) {
     model: "gemini-3.5-flash-lite",
     contents: content,
     config: { systemInstruction: prompt },
+    
   });
 
   return Response.json({ answer: answer.text });
