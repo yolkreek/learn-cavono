@@ -10,7 +10,8 @@ import {
 } from "../ui/dropdown-menu";
 import AgentPromptPopover from "./AgentPromptPopover";
 import { createPortal } from "react-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { usePopoverOpen } from "@/hooks/usePopoverOpen";
 
 export default function CardDropDown({
   id,
@@ -27,27 +28,14 @@ export default function CardDropDown({
   ) => void;
   content: string;
 }) {
-  const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
-
   const askGeminiButton = useRef<HTMLDivElement | null>(null);
   const askGeminiPopover = useRef<HTMLDivElement | null>(null);
-  const [coord, setCoord] = useState<DOMRect | null>(null);
-  useEffect(() => {
-    if (!isPopoverOpen) return;
-    const portalClose = (e: Event) => {
-      if (e.target !== askGeminiPopover.current) {
-        setIsPopoverOpen(false);
-      }
-    };
+  const [domrect, setDomrect] = useState<DOMRect | null>(null);
+  const { isPopoverOpen, setIsPopoverOpen } = usePopoverOpen(
+    askGeminiPopover,
+    askGeminiButton,
+  );
 
-    window.addEventListener("scroll", portalClose, true);
-    window.addEventListener("resize", portalClose);
-
-    return () => {
-      window.removeEventListener("scroll", portalClose, true);
-      window.removeEventListener("resize", portalClose);
-    };
-  }, [isPopoverOpen]);
   return (
     <>
       <DropdownMenu modal={false}>
@@ -82,10 +70,8 @@ export default function CardDropDown({
                 "relative transition-all 300 ease-in focus:bg-brand/20 cursor-pointer"
               }
               onClick={(e) => {
-                console.log(e.currentTarget);
-                console.log(e.target);
                 setIsPopoverOpen(!isPopoverOpen);
-                setCoord(askGeminiButton.current!.getBoundingClientRect());
+                setDomrect(askGeminiButton.current!.getBoundingClientRect());
               }}
               ref={askGeminiButton}
             >
@@ -106,17 +92,13 @@ export default function CardDropDown({
         </DropdownMenuContent>
       </DropdownMenu>
       {isPopoverOpen &&
-        coord &&
+        domrect &&
         createPortal(
-          <div
-            className="absolute z-50 bg-brand-lite w-100 h-120 rounded-2xl ring-1 p-2 ring-brand-lite/50 shadow-md shadow-black"
-            style={{
-              top: coord.top + coord.height,
-              left: coord.left + coord.width,
-            }}
-          >
-            <AgentPromptPopover content={content} ref={askGeminiPopover} />
-          </div>,
+          <AgentPromptPopover
+            content={content}
+            ref={askGeminiPopover}
+            domrect={domrect}
+          />,
           document.body,
         )}
     </>
