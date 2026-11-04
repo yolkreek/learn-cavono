@@ -3,74 +3,57 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useSignUp } from "@/hooks/useSignUp";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
+type FormValues = {
+  email: string;
+  password: string;
+};
 export default function SignUpForm() {
-  const [password, setPassword] = useState<string | null>(null);
-  const [repassword, setRepassword] = useState<string | null>(null);
-  const [isMatch, setIsMatch] = useState<boolean>(true);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>();
+
+  const pw = watch("password");
+
   const { submit, loading, success, error } = useSignUp();
+  const [isMatch, setIsMatch] = useState(false);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-
-    if (password === "" || password === null) return;
-    if (repassword !== password) {
-      setIsMatch(false);
-      return;
-    }
-    if (repassword === password) {
-      setIsMatch(true);
-    }
-
-    submit(
-      form.get("signup-email") as string,
-      form.get("signup-password") as string,
-    );
+  const onSubmit = (data: FormValues) => {
+    submit(data.email, data.password);
   };
   return (
     <>
       <form
         className="flex flex-col gap-4 justify-center"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <Label htmlFor="signup-email">Your e-mail..</Label>
+        <Label>Email</Label>
         <Input
-          id="signup-email"
-          name="signup-email"
+          className="bg-white"
           type="email"
-          className="bg-white"
-          disabled={success}
+          {...register("email", {
+            required: true,
+          })}
         ></Input>
-        <Label htmlFor="signup-password">Your password..</Label>
+        <Label>Password</Label>
         <Input
-          id="signup-password"
-          name="signup-password"
-          type="password"
           className="bg-white"
-          disabled={success}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
+          type="password"
+          {...register("password", {
+            required: true,
+          })}
         ></Input>
-        {password === "" && (
-          <Label
-            htmlFor="signup-password-re"
-            className="text-red-700 block text-right text-xs"
-          >
-            Enter your password
-          </Label>
-        )}
-        <Label htmlFor="signup-password-re">Your password again..</Label>
+
+        <Label>Password again</Label>
         <Input
-          id="signup-password-re"
-          name="signup-password-re"
-          type="password"
           className="bg-white"
-          disabled={success}
-          aria-invalid={isMatch === false}
           onChange={(e) => {
-            setRepassword(e.target.value);
+            if (e.target.value === pw) setIsMatch(true);
+            else setIsMatch(false);
           }}
         ></Input>
         {isMatch === false && (
